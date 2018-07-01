@@ -226,7 +226,8 @@ class Radipy(object):
 
         # 日を跨いでいる場合は前の日の番組表を探す
         except AttributeError:
-            datetime_api_url = 'http://radiko.jp/v3/program/date/{}/{}.xml'.format(int(self.ft[:8]) - 1, self.area_id)
+            pre_date = datetime.datetime.strptime(self.ft[:8], '%Y%m%d') - datetime.timedelta(days=1)
+            datetime_api_url = 'http://radiko.jp/v3/program/date/{}/{}.xml'.format(pre_date.strftime('%Y%m%d'), self.area_id)
             res = requests.get(url=datetime_api_url)
             channels_xml = res.content
             tree = ET.fromstring(channels_xml)
