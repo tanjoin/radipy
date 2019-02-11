@@ -92,3 +92,15 @@ brew install ffmpeg swftools
 + Python 3.6.4
 + Pipenv 11.9.0
 + Homebrew 1.6.0c
+
+# cron
+
+```
+node index.js
+```
+
+## run.sh 
+
+```
+python radipy.py -id=QRR -ls | grep "ご注文は" | xargs -n 2 sh -c 'python radipy.py -id=QRR -ft=$0'
+```

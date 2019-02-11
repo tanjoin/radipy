@@ -93,3 +93,9 @@ tmp
 # Default output files
 output
 archive
+
+# Run Script
+run.sh
+
+# Node.js
+node_modules
