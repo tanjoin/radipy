@@ -1,7 +1,8 @@
 const CronJob = require('cron').CronJob;
 const exec = require('child_process').exec;
 
-new CronJob('00 04 * * *', async () => {
+new CronJob('00 */2 * * *', async () => {
+  console.log('cron start!');
   exec('./run.sh', (err, stdout, stderr) => {
     if (err) {
       console.error(err);
