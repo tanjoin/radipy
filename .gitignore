@@ -100,3 +100,5 @@ run.sh
 
 # Node.js
 node_modules
+list.data
+list.sh
