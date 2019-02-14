@@ -99,8 +99,14 @@ brew install ffmpeg swftools
 node index.js
 ```
 
-## run.sh 
+## run.sh
 
 ```
-python radipy.py -id=QRR -ls | grep "ご注文は" | xargs -n 2 sh -c 'python radipy.py -id=QRR -ft=$0'
+grep "ご注文は" list/QRR.data | xargs -n 2 sh -c 'python radipy.py -id=QRR -ft=$0'
+```
+
+## list.sh
+
+```
+python radipy.py -id=QRR -ls > list/QRR.data
 ```
