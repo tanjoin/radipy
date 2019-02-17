@@ -12,7 +12,7 @@ new CronJob('00 8 * * *', async () => {
   });
 }, null, true, 'Asia/Tokyo');
 
-new CronJob('00 3 * * *', async () => {
+new CronJob('31 0,3 * * *', async () => {
   console.log('cron start!' + new Date().toLocaleString('ja-JP'));
   exec('./run.sh', (err, stdout, stderr) => {
     if (err) {
