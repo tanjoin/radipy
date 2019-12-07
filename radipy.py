@@ -27,7 +27,6 @@ KEYFILE_PATH = Path(TMP_PATH, 'authkey.{}.jpg'.format(DATE))
 PLAYLISTFILE_PATH = Path(TMP_PATH, 'playlist.{}.m3u8'.format(DATE))
 
 
-# http://stackoverflow.com/questions/4995733/how-to-create-a-spinning-command-line-cursor-using-pythonのパクリ
 class Spinner:
     busy = False
     delay = 0.5
