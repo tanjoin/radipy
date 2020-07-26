@@ -101,25 +101,10 @@ class Radipy(object):
         self._get_area_id()
         self._get_area_channels()
 
-    def get_old_programs(self, dt):
+    def get_programs(self, dt=datetime.datetime.now()):
         self.authenticate()
         self._get_area_id()
         date = datetime.datetime.strftime(dt, '%Y%m%d')
-        datetime_api_url = 'http://radiko.jp/v3/program/date/{}/{}.xml'.format(date[:8], self.area_id)
-        res = requests.get(url=datetime_api_url)
-        channels_xml = res.content
-        tree = ET.fromstring(channels_xml)
-        station = tree.find('.//station[@id="{}"]'.format(self.station_id))
-        progs = station.findall('.//prog')
-        for prog in progs:
-            title = prog.find('.//title').text
-            ft = prog.attrib['ft']
-            print(ft, title)
-
-    def get_programs(self):
-        self.authenticate()
-        self._get_area_id()
-        date = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d')
         datetime_api_url = 'http://radiko.jp/v3/program/date/{}/{}.xml'.format(date[:8], self.area_id)
         res = requests.get(url=datetime_api_url)
         channels_xml = res.content
@@ -302,7 +287,7 @@ def main(area, id, ft, ls, clear, dt):
         radipy.create()
     elif id and ls and dt:
         radipy = Radipy(station_id=id, ft=0)
-        radipy.get_old_programs(dt=dt)
+        radipy.get_programs(dt=dt)
     elif id and ls:
         radipy = Radipy(station_id=id, ft=0)
         radipy.get_programs()
