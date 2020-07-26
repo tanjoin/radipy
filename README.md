@@ -107,6 +107,8 @@ grep "ご注文は" list/QRR.data | xargs -n 2 sh -c 'python radipy.py -id=QRR -
 
 ## list.sh
 
+### Mac
+
 ```
-python radipy.py -id=QRR -ls > list/QRR.data
+python radipy.py -id=QRR -ls -dt=`date -v -1d "+%Y-%m-%d"` > list/QRR.data
 ```
