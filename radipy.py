@@ -101,6 +101,21 @@ class Radipy(object):
         self._get_area_id()
         self._get_area_channels()
 
+    def get_old_programs(self, dt):
+        self.authenticate()
+        self._get_area_id()
+        date = datetime.datetime.strftime(dt, '%Y%m%d')
+        datetime_api_url = 'http://radiko.jp/v3/program/date/{}/{}.xml'.format(date[:8], self.area_id)
+        res = requests.get(url=datetime_api_url)
+        channels_xml = res.content
+        tree = ET.fromstring(channels_xml)
+        station = tree.find('.//station[@id="{}"]'.format(self.station_id))
+        progs = station.findall('.//prog')
+        for prog in progs:
+            title = prog.find('.//title').text
+            ft = prog.attrib['ft']
+            print(ft, title)
+
     def get_programs(self):
         self.authenticate()
         self._get_area_id()
@@ -272,10 +287,11 @@ class Radipy(object):
 @click.command(help='Radipy is CLI radiko Downloader written by python3.')
 @click.option('-a', '--area', is_flag=True, help='print station id & name in your area')
 @click.option('-ls', is_flag=True, help='print program titles & start time. using with -id option')
+@click.option('-dt', type=click.DateTime(), help='print program titles & start time. using with -ls, -id option')
 @click.option('-id', type=str, help='set station id')
 @click.option('-ft', type=str, help='set start datetime str formated by yyyyMMddHHmm e.g. 201804171830')
 @click.option('--clear', is_flag=True, help='clear authkey and player in tmp dir')
-def main(area, id, ft, ls, clear):
+def main(area, id, ft, ls, clear, dt):
     if clear:
         Radipy.clear()
     elif area:
@@ -284,6 +300,9 @@ def main(area, id, ft, ls, clear):
     elif id and ft:
         radipy = Radipy(station_id=id, ft=ft)
         radipy.create()
+    elif id and ls and dt:
+        radipy = Radipy(station_id=id, ft=0)
+        radipy.get_old_programs(dt=dt)
     elif id and ls:
         radipy = Radipy(station_id=id, ft=0)
         radipy.get_programs()
