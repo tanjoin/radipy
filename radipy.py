@@ -9,10 +9,7 @@ from xml.etree import ElementTree as ET
 
 import click
 import requests
-import logging
 from prettytable import PrettyTable
-
-logging.basicConfig(level=logging.DEBUG)
 
 DATE = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d-%H')
 TMP_PATH = Path('./tmp').resolve()
