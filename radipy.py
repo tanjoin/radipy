@@ -9,7 +9,10 @@ from xml.etree import ElementTree as ET
 
 import click
 import requests
+import logging
 from prettytable import PrettyTable
+
+logging.basicConfig(level=logging.DEBUG)
 
 DATE = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d-%H')
 TMP_PATH = Path('./tmp').resolve()
@@ -67,8 +70,9 @@ class Response(object):
 
 class Radipy(object):
     player_url = 'http://radiko.jp/apps/js/flash/myplayer-release.swf'
-    fms1_url = 'https://radiko.jp/v2/api/auth1_fms'
-    fms2_url = 'https://radiko.jp/v2/api/auth2_fms'
+    auth1_url = 'https://radiko.jp/v2/api/auth1'
+    auth2_url = 'https://radiko.jp/v2/api/auth2'
+    radiko_authkey_value = "bcd151073c03b352e1ef2fd66c32209da9ca0afa"
     LANG = 'ja_JP.utf8'
     auth_response = Response()
     auth_success_response = Response()
@@ -105,6 +109,7 @@ class Radipy(object):
         self._get_area_id()
         date = datetime.datetime.strftime(dt, '%Y%m%d')
         datetime_api_url = 'http://radiko.jp/v3/program/date/{}/{}.xml'.format(date[:8], self.area_id)
+        print(datetime_api_url)
         res = requests.get(url=datetime_api_url)
         channels_xml = res.content
         tree = ET.fromstring(channels_xml)
@@ -156,12 +161,12 @@ class Radipy(object):
         headers = {
             'Host': 'radiko.jp',
             'pragma': 'no-cache',
-            'X-Radiko-App': 'pc_ts',
-            'X-Radiko-App-Version': '4.0.0',
+            'X-Radiko-App': 'pc_html5',
+            'X-Radiko-App-Version': '0.0.1',
             'X-Radiko-User': 'test-stream',
             'X-Radiko-Device': 'pc'
         }
-        res = requests.post(url=self.fms1_url, headers=headers)
+        res = requests.get(url=self.auth1_url, headers=headers)
         self.auth_response.body = res.text
         self.auth_response.headers = res.headers
         self.auth_response.authtoken = self.auth_response.headers['x-radiko-authtoken']
@@ -170,23 +175,20 @@ class Radipy(object):
 
     def _generate_partialkey(self):
         print('generate particleKey...')
-        with KEYFILE_PATH.open('rb+') as file:
-            file.seek(self.auth_response.offset)
-            data = file.read(self.auth_response.length)
-            self.partialkey = base64.b64encode(data)
+        self.partialkey = base64.b64encode(self.radiko_authkey_value.encode()[self.auth_response.offset : (self.auth_response.offset + self.auth_response.length)])
 
     def _get_auth2(self):
         print('access auth2_fms...')
         headers ={
           'pragma': 'no-cache',
-          'X-Radiko-App': 'pc_ts',
-          'X-Radiko-App-Version': '4.0.0',
+          'X-Radiko-App': 'pc_html5',
+          'X-Radiko-App-Version': '0.0.1',
           'X-Radiko-User': 'test-stream',
           'X-Radiko-Device': 'pc',
           'X-Radiko-Authtoken': self.auth_response.authtoken,
           'X-Radiko-Partialkey': self.partialkey,
         }
-        res = requests.post(url=self.fms2_url, headers=headers)
+        res = requests.get(url=self.auth2_url, headers=headers)
         self.auth_success_response.body = res.text
         self.auth_success_response.headers = res.headers
 
