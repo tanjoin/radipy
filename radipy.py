@@ -88,8 +88,6 @@ class Radipy(object):
         subprocess.call('rm -v {}/*.swf'.format(TMP_PATH, shell=True))
 
     def authenticate(self):
-        # self._get_playerfile()
-        # self._get_keyfile()
         self._get_auth1()
         self._generate_partialkey()
         self._get_auth2()
@@ -129,30 +127,6 @@ class Radipy(object):
         else:
             print('failed!!')
         spinner.stop()
-
-    def _get_playerfile(self):
-        print(PLAYERFILE_PATH)
-        if PLAYERFILE_PATH.exists():
-            print('playerFile already exists.')
-        else:
-            print('create playerFile...')
-            res = requests.get(self.player_url)
-            if res.status_code == 200:
-                with PLAYERFILE_PATH.open('wb') as file:
-                    file.write(res.content)
-            if not PLAYERFILE_PATH.exists():
-                print('playerfile is not created.')
-                exit()
-
-    def _get_keyfile(self):
-        if KEYFILE_PATH.exists():
-            print('keyfile already exists.')
-        else:
-            print('create KeyFile...')
-            subprocess.call('swfextract -b 12 {} -o {}'.format(PLAYERFILE_PATH, KEYFILE_PATH), shell=True)
-            if not KEYFILE_PATH.exists():
-                print('keyfile is not created. confirm swfextract is installed.')
-                exit()
 
     def _get_auth1(self):
         print('access auth1_fms...')
