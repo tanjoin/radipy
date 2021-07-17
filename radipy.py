@@ -88,8 +88,8 @@ class Radipy(object):
         subprocess.call('rm -v {}/*.swf'.format(TMP_PATH, shell=True))
 
     def authenticate(self):
-        self._get_playerfile()
-        self._get_keyfile()
+        # self._get_playerfile()
+        # self._get_keyfile()
         self._get_auth1()
         self._generate_partialkey()
         self._get_auth2()
@@ -131,6 +131,7 @@ class Radipy(object):
         spinner.stop()
 
     def _get_playerfile(self):
+        print(PLAYERFILE_PATH)
         if PLAYERFILE_PATH.exists():
             print('playerFile already exists.')
         else:
