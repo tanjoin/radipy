@@ -106,3 +106,5 @@ list/
 
 # vscode
 .vscode/settings.json
+
+private
