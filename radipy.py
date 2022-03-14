@@ -249,7 +249,8 @@ class Radipy(object):
 @click.option('-id', type=str, help='set station id')
 @click.option('-ft', type=str, help='set start datetime str formated by yyyyMMddHHmm e.g. 201804171830')
 @click.option('--clear', is_flag=True, help='clear authkey and player in tmp dir')
-def main(area, id, ft, ls, clear, dt):
+@click.option('-url', type=str, help="set radiko.jp url")
+def main(area, id, ft, ls, clear, dt, url):
     if clear:
         Radipy.clear()
     elif area:
@@ -264,7 +265,12 @@ def main(area, id, ft, ls, clear, dt):
     elif id and ls:
         radipy = Radipy(station_id=id, ft=0)
         radipy.get_programs()
-
+    elif url:
+        splited_url = url.split('/')
+        station_id = splited_url[5]
+        ft = splited_url[6]
+        radipy = Radipy(station_id=station_id, ft=ft)
+        radipy.create()
 
 if __name__ == '__main__':
     main()
