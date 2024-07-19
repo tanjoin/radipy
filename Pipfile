@@ -13,3 +13,6 @@ pytest = "*"
 
 [requires]
 python_version = "3.9"
+
+[scripts]
+radipy = "python radipy.py"

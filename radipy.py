@@ -192,6 +192,9 @@ class Radipy(object):
             datetime_api_url = 'http://radiko.jp/v3/program/date/{}/{}.xml'.format(self.ft[:8], self.area_id)
             res = requests.get(url=datetime_api_url)
             channels_xml = res.content
+            # ft の値がおかしい場合にチェックしたりする用
+            with open('tmp/res.xml', 'wb') as f:
+                f.write(channels_xml)
             tree = ET.fromstring(channels_xml)
             station = tree.find('.//station[@id="{}"]'.format(self.station_id))
             prog = station.find('.//prog[@ft="{}"]'.format(self.ft))

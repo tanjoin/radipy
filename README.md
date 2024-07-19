@@ -99,6 +99,10 @@ brew install ffmpeg swftools
 node index.js
 ```
 
+```
+node index.js 2>&1 | tee output.log
+```
+
 ## run.sh
 
 ```
