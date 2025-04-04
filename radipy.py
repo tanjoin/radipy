@@ -228,7 +228,7 @@ class Radipy(object):
             if not program_dir.exists():
                 print('create program dir: {}'.format(program_dir))
                 program_dir.mkdir()
-            aac_file = Path(program_dir, '{}_{}.aac'.format(self.title, self.ft[:8]))
+            aac_file = Path(program_dir, '{}_{}.aac'.format(self.title, self.ft[:10]))
             cmd = ('ffmpeg '
                    '-loglevel fatal '
                    '-n -headers "X-Radiko-AuthToken: {}" '
