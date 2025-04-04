@@ -112,8 +112,11 @@ class Radipy(object):
         progs = station.findall('.//prog')
         for prog in progs:
             title = prog.find('.//title').text
+            pfm = prog.find('.//pfm').text
+            if pfm is None:
+                pfm = ''
             ft = prog.attrib['ft']
-            print(ft, title)
+            print(ft, title, '::', pfm)
 
     def create(self):
         self.authenticate()
