@@ -99,8 +99,10 @@ brew install ffmpeg swftools
 node index.js
 ```
 
-```
+```sh
 node index.js 2>&1 | tee output.log
+# or
+npm run radipy | tee >(rotatelogs log/output-%Y%m%d.log 86400 540)
 ```
 
 ## run.sh
