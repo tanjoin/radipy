@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node index.js",
     "radipy": "node index.js",
+    "radipy:with-log": "node index.js | tee /dev/tty | rotatelogs log/output-%Y%m%d.log 86400 540",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -16,5 +17,9 @@
   "license": "ISC",
   "dependencies": {
     "cron": "^1.6.0"
+  },
+  "devDependencies": {
+    "pino-roll": "^4.0.0",
+    "pino-tee": "^0.3.0"
   }
 }
