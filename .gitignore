@@ -91,20 +91,18 @@ tmp
 .idea
 
 # Default output files
-output
-output2
-archive
-
-# Run Script
-run.sh
+output*
+archive*
 
 # Node.js
 node_modules
-*.data
-list.sh
-list/
 
 # vscode
 .vscode/settings.json
 
 private
+
+*.m4a
+*.aac
+*.part
+*.tmp

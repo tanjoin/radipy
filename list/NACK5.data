@@ -1,0 +1,35 @@
+access auth1_fms...
+generate particleKey...
+access auth2_fms...
+--------------------
+authentication success.
+area_id: JP13
+http://radiko.jp/v3/program/date/20260129/JP13.xml
+20260129050000 NACK5時ラジ :: くまきもえ
+20260129060000 Good Luck！Morning！ Part1 :: アロハ太朗
+20260129070000 Good Luck！Morning！ Part2 :: アロハ太朗
+20260129080000 Good Luck！Morning！ Part3 :: アロハ太朗
+20260129090000 Smile SUMMIT Part1 :: 栗林さみ
+20260129100000 Smile SUMMIT Part2 :: 栗林さみ
+20260129110000 Smile SUMMIT Part3 :: 栗林さみ
+20260129120000 Smile SUMMIT Part4 :: 栗林さみ
+20260129123000 旬！SHUN！ピックアップ :: 竹内都子／ねづっち／島田秀平／真木ひろか／萬谷宜子
+20260129124500 BEAUTIFUL SONGS ～こころの歌～ :: 長谷川雄啓
+20260129130000 GOGOMONZ Part1 :: 三遊亭鬼丸,横田かおり
+20260129140000 GOGOMONZ Part2 :: 三遊亭鬼丸,横田かおり
+20260129150000 GOGOMONZ Part3 :: 三遊亭鬼丸,横田かおり
+20260129160000 GOGOMONZ Part4 :: 三遊亭鬼丸,横田かおり
+20260129170000 THE SEITARO★RADIO SHOW「1700」 :: 大野勢太郎
+20260129175000 エネクル presents まいにちザキヤマ :: 山崎弘也（アンタッチャブル）
+20260129180000 キラスタ :: 三浦祐太朗,斉藤百香
+20260129200000 FAV FOUR (木) Part1 :: はなわ,亜咲花
+20260129210000 FAV FOUR (木) Part2 :: はなわ,亜咲花
+20260129220000 FAV FOUR (木) Part3 :: はなわ,亜咲花
+20260129230000 ALL The Feels（Bialystocks） :: 週替わりパーソナリティー
+20260129233000 小柳ゆき drive your heart :: 小柳ゆき
+20260130000000 Age Free Music！ :: 富澤一誠
+20260130010000 ラジオのアナ～ラジアナ（木） Part1 :: 太朗（太鵬）
+20260130020000 ラジオのアナ～ラジアナ（木） Part2 :: 太朗（太鵬）
+20260130030000 ラジオのアナ～ラジアナ（木） Part3 :: 太朗（太鵬）
+20260130040000 ラジオのアナ～ラジアナ（木） Part4 :: 太朗（太鵬）
+20260130044500 旬！SHUN！ピックアップ :: 
