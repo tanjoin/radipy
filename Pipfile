@@ -16,3 +16,4 @@ python_version = "3.9"
 
 [scripts]
 radipy = "python radipy.py"
+org = "python sorting_file.py"

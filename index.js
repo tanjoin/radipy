@@ -22,3 +22,14 @@ new CronJob('30 8 * * *', async () => {
     console.log(stdout);
   });
 }, null, true, 'Asia/Tokyo');
+
+new CronJob('0 6 * * *', async () => {
+  console.log('organize files!');
+  exec('pipenv run org', (err, stdout, stderr) => {
+    if (err) {
+      console.error(err);
+      return;
+    }
+    console.log(stdout);
+  });
+}, null, true, 'Asia/Tokyo');
