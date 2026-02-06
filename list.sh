@@ -17,9 +17,10 @@ echo "--------------------------------------------"
 echo "[過去データの保存　完了] `date`"
 
 export PIPENV_IGNORE_VIRTUALENVS=1
+export PIPENV_DONT_LOAD_ENV=1
 
 # 取得日付のオフセット（日）— この値を編集して一括変更
-DAYS_BACK=5
+DAYS_BACK=${1:-1}
 
 echo "--------------------------------------------"
 echo "[番組表の取得　　　] `date`"
