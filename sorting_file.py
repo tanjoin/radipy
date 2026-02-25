@@ -1,7 +1,6 @@
 import os
 import sys
 import shutil
-import unicodedata
 from difflib import SequenceMatcher
 from difflib import get_close_matches
 
@@ -45,11 +44,9 @@ def get_dir_name(keyword, video_list) -> str:
 
 
 def get_partial_match(keyword, video_list):
-    keyword = unicodedata.normalize('NFKC', keyword)
     result = []
     for v in video_list:
-        nv = unicodedata.normalize('NFKC', v)
-        if keyword in nv:
+        if keyword in v:
             result.append(v)
     return keyword, result
 
@@ -64,7 +61,7 @@ def move_archives(keyword, video_list, func):
         return
     if func == get_partial_match:
         print('-> {} is found.'.format(keyword))
-    dir_path = 'output3/{}'.format(title.replace('.mp4', ''))
+    dir_path = 'output3/{}'.format(title.replace('.mp4', '').replace('.m4a', ''))
     os.makedirs(dir_path, exist_ok=True)
     for v in results:
         try:

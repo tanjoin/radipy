@@ -7,6 +7,11 @@ log() {
   echo -e "$(date '+%Y-%m-%dT%H:%M:%S') ${PROCNAME} $@" | tee -a ${LOGFILE}
 }
 
+# 既ダウンロードURL管理ログ
+DOWNLOAD_LOG="${DOWNLOAD_LOG:-download.log}"
+# ログファイルが無ければ作成
+[ -f "$DOWNLOAD_LOG" ] || : > "$DOWNLOAD_LOG"
+
 WEBHOOK_URL=""
 if [ -f .env ]; then
   export $(grep -v '^#' .env | xargs)
@@ -86,33 +91,49 @@ download_from_list() {
   }
 
   for pattern in "$@"; do
-    grep "$pattern" "$file" | while IFS= read -r line; do
-      date="${line:0:14}"
-      title="${line:15}"
-      title="${title%%::*}"
+    (
+      grep "$pattern" "$file" | while IFS= read -r line; do
+        date="${line:0:14}"
+        title="${line:15}"
+        title="${title%%::*}"
         title_out="$(sanitize_filename "$title")"
         url="https://radiko.jp/#!/ts/${station}/${date}"
-        if acquire_url_lock "$url"; then
-          dow_label="$(weekday_label "$date")"
-          log "[START] ${title_out}[${station}-${date}] ${dow_label}"
-          if yt-dlp -q "$url" -o "${title_out}[${station}-${date}].%(ext)s"; then
-            log "[END] ${title_out}[${station}-${date}]"
-            if [ -n "$WEBHOOK_URL" ]; then
-              curl -s -o /dev/null -X POST -H 'Content-type: application/json' --data "{\"attachments\":[{\"fallback\":\"ダウンロード: ${title_out}[${station}-${date}]\",\"color\":\"good\",\"fields\":[{\"title\":\"ダウンロード\",\"value\":\"<${url}|${title_out}[${station}-${date}]>\"}]}]}" "$WEBHOOK_URL"
-            fi
-            release_url_lock "$url"
-          else
-            exit_code=$?
-            log "[ERROR] ${title_out}[${station}-${date}] (exit ${exit_code})"
-            if [ -n "$WEBHOOK_URL" ]; then
-              curl -s -o /dev/null -X POST -H 'Content-type: application/json' --data "{\"attachments\":[{\"fallback\":\"エラー: ${title_out}[${station}-${date}]\",\"color\":\"danger\",\"fields\":[{\"title\":\"エラー\",\"value\":\"<${url}|${title_out}[${station}-${date}]>\"}]}]}" "$WEBHOOK_URL"
-            fi
-            release_url_lock "$url"
+
+        (
+          # 既にダウンロード済みならスキップ
+          if grep -Fxq "$url" "$DOWNLOAD_LOG"; then
+            log "[SKIP] Already downloaded: ${title_out}[${station}-${date}]"
+            exit 0
           fi
-        else
-          log "[SKIP] Duplicate in-progress: ${title_out}[${station}-${date}]"
-        fi
-    done &
+          if acquire_url_lock "$url"; then
+            dow_label="$(weekday_label "$date")"
+            log "[START] ${title_out}[${station}-${date}] ${dow_label}"
+            if yt-dlp -q "$url" -o "${title_out}[${station}-${date}].%(ext)s"; then
+              log "[END] ${title_out}[${station}-${date}]"
+              # ダウンロード成功時にURLを記録
+              if ! grep -Fxq "$url" "$DOWNLOAD_LOG"; then
+                printf "%s\n" "$url" >> "$DOWNLOAD_LOG"
+              fi
+              if [ -n "$WEBHOOK_URL" ]; then
+                curl -s -o /dev/null -X POST -H 'Content-type: application/json' --data "{\"attachments\":[{\"fallback\":\"ダウンロード: ${title_out}[${station}-${date}]\",\"color\":\"good\",\"fields\":[{\"title\":\"ダウンロード\",\"value\":\"<${url}|${title_out}[${station}-${date}]>\"}]}]}" "$WEBHOOK_URL"
+              fi
+              release_url_lock "$url"
+            else
+              exit_code=$?
+              log "[ERROR] ${title_out}[${station}-${date}] (exit ${exit_code})"
+              if [ -n "$WEBHOOK_URL" ]; then
+                curl -s -o /dev/null -X POST -H 'Content-type: application/json' --data "{\"attachments\":[{\"fallback\":\"エラー: ${title_out}[${station}-${date}]\",\"color\":\"danger\",\"fields\":[{\"title\":\"エラー\",\"value\":\"<${url}|${title_out}[${station}-${date}]>\"}]}]}" "$WEBHOOK_URL"
+              fi
+              release_url_lock "$url"
+            fi
+          else
+            log "[SKIP] Duplicate in-progress: ${title_out}[${station}-${date}]"
+          fi
+        ) &
+        
+      done
+      wait
+    ) &
   done
 
   wait

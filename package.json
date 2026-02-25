@@ -4,8 +4,9 @@
   "description": "Radipy is CLI radiko Downloader written by python3.",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "radipy": "node index.js",
+    "start": "node index.js --cron",
+    "radipy": "node index.js --cron",
+    "radipy:manual": "node index.js",
     "radipy:with-log": "node index.js | tee /dev/tty | rotatelogs log/output-%Y%m%d.log 86400 540",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
