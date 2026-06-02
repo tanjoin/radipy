@@ -89,6 +89,11 @@ download_radio() {
 
   create_radiko_dir "$url"
 
+  if grep -Fxq "$url" "$DOWNLOAD_LOG"; then
+    my_log "[SKIP] Already downloaded: ${title_out}[${station}-${date}]"
+    exit 0
+  fi
+
   if acquire_url_lock "$url"; then
     # 14桁の日時文字列を取得して曜日関数へ渡す
     local datetime_str=$(echo "$url" | cut -d'/' -f7)
